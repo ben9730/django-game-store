@@ -15,22 +15,36 @@ def admin_panel(request):
         image_forms = []
         video_forms = []
         
-        # Process image forms
-        for i in range(1, 6):  # Support up to 5 images
-            if f'image_{i}' in request.FILES or f'image_url_{i}' in request.POST:
-                image_forms.append(GameImageForm({
-                    'image': request.FILES.get(f'image_{i}'),
-                    'image_url': request.POST.get(f'image_url_{i}')
-                }))
+        # Process main image form (the first one displayed)
+        main_image_form = GameImageForm(request.POST)
+        if main_image_form.is_valid() and main_image_form.cleaned_data.get('image_url'):
+            image_forms.append(main_image_form)
         
-        # Process video forms
-        for i in range(1, 3):  # Support up to 2 videos
-            if f'video_url_{i}' in request.POST:
-                video_forms.append(GameVideoForm({
-                    'video_url': request.POST.get(f'video_url_{i}')
-                }))
+        # Process main video form (the first one displayed)
+        main_video_form = GameVideoForm(request.POST)
+        if main_video_form.is_valid() and main_video_form.cleaned_data.get('video_url'):
+            video_forms.append(main_video_form)
         
-        if game_form.is_valid() and all(form.is_valid() for form in image_forms) and all(form.is_valid() for form in video_forms):
+        # Process additional image forms (dynamically added)
+        for i in range(0, 10):  # Support up to 10 additional images
+            if f'image_url_{i}' in request.POST and request.POST.get(f'image_url_{i}').strip():
+                image_data = {'image_url': request.POST.get(f'image_url_{i}')}
+                image_form = GameImageForm(image_data)
+                if image_form.is_valid():
+                    image_forms.append(image_form)
+        
+        # Process additional video forms (dynamically added)
+        for i in range(0, 10):  # Support up to 10 additional videos
+            if f'video_url_{i}' in request.POST and request.POST.get(f'video_url_{i}').strip():
+                video_data = {
+                    'video_url': request.POST.get(f'video_url_{i}'),
+                    'title': request.POST.get(f'video_title_{i}', f'Video {i+1}')
+                }
+                video_form = GameVideoForm(video_data)
+                if video_form.is_valid():
+                    video_forms.append(video_form)
+        
+        if game_form.is_valid():
             game = game_form.save()
             
             # Save images

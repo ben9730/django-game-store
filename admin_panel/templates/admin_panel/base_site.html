@@ -13,9 +13,6 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="games-tab" data-bs-toggle="tab" href="#games" role="tab">Games</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="sales-tab" data-bs-toggle="tab" href="#sales" role="tab">Sales Reports</a>
-                        </li>
                     </ul>
                     <div class="tab-content mt-3">
                         <div class="tab-pane fade show active" id="games" role="tabpanel">
@@ -45,9 +42,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="sales" role="tabpanel">
-                            {% include 'admin_panel/sales_reports.html' %}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -55,6 +49,8 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 let imageFormCount = 1;
 let videoFormCount = 1;
@@ -65,13 +61,9 @@ function addImageForm() {
     form.className = 'mb-3';
     form.innerHTML = `
         <div class="row">
-            <div class="col-md-6">
-                <label class="form-label">Image File</label>
-                <input type="file" name="image_${imageFormCount}" class="form-control">
-            </div>
-            <div class="col-md-6">
+            <div class="col-12">
                 <label class="form-label">Image URL</label>
-                <input type="url" name="image_url_${imageFormCount}" class="form-control">
+                <input type="url" name="image_url_${imageFormCount}" class="form-control" required>
             </div>
         </div>
     `;
@@ -85,14 +77,25 @@ function addVideoForm() {
     form.className = 'mb-3';
     form.innerHTML = `
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-6">
                 <label class="form-label">Video URL</label>
-                <input type="url" name="video_url_${videoFormCount}" class="form-control">
+                <input type="url" name="video_url_${videoFormCount}" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Video Title</label>
+                <input type="text" name="video_title_${videoFormCount}" class="form-control" placeholder="Video ${videoFormCount + 1}">
             </div>
         </div>
     `;
     container.appendChild(form);
     videoFormCount++;
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    flatpickr('.datepicker', {
+        dateFormat: 'Y-m-d',
+        locale: 'en'
+    });
+});
 </script>
 {% endblock %}

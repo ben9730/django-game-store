@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, View
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 from .models import Game, Platform, GameImage, GameVideo
 from .forms import GameImageForm, GameVideoForm
@@ -114,4 +116,15 @@ class GameVideoDeleteView(View):
         video = get_object_or_404(GameVideo, id=video_id)
         video.delete()
         messages.success(request, 'Video deleted successfully')
+        return redirect('games:game_video_upload', pk=pk)
+
+
+@method_decorator(staff_member_required, name='dispatch')
+class GameDeleteView(View):
+    """Allow staff to delete a game."""
+    def post(self, request, pk):
+        game = get_object_or_404(Game, id=pk)
+        game.delete()
+        messages.success(request, 'Game deleted successfully')
+        return redirect('games:game_list')
         return redirect('games:game_video_upload', pk=pk)
