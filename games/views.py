@@ -5,7 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 from .models import Game, Platform, GameImage, GameVideo
-from .forms import GameImageForm, GameVideoForm
+from .forms import GameImageForm, GameVideoForm, PlatformForm
 
 
 class GameListView(ListView):
@@ -127,4 +127,41 @@ class GameDeleteView(View):
         game.delete()
         messages.success(request, 'Game deleted successfully')
         return redirect('games:game_list')
+
+
+# ------------------- Platform Create / Update -------------------
+@method_decorator(staff_member_required, name='dispatch')
+class PlatformCreateView(View):
+    """Allow staff users to add a new gaming platform."""
+
+    def get(self, request):
+        form = PlatformForm()
+        return render(request, 'games/platform_form.html', {'form': form})
+
+    def post(self, request):
+        form = PlatformForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Platform added successfully')
+            return redirect('games:platform_list')
+        return render(request, 'games/platform_form.html', {'form': form})
+
+
+@method_decorator(staff_member_required, name='dispatch')
+class PlatformUpdateView(View):
+    """Allow staff users to edit an existing platform."""
+
+    def get(self, request, pk):
+        platform = get_object_or_404(Platform, id=pk)
+        form = PlatformForm(instance=platform)
+        return render(request, 'games/platform_form.html', {'form': form, 'platform': platform})
+
+    def post(self, request, pk):
+        platform = get_object_or_404(Platform, id=pk)
+        form = PlatformForm(request.POST, instance=platform)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Platform updated successfully')
+            return redirect('games:platform_list')
+        return render(request, 'games/platform_form.html', {'form': form, 'platform': platform})
         return redirect('games:game_video_upload', pk=pk)

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if platform %}Edit Platform{% else %}Add Platform{% endif %} - Game Store{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">{% if platform %}Edit Platform{% else %}Add Platform{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'games:platform_list' %}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+{% endblock %}
