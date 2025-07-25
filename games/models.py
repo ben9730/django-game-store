@@ -62,7 +62,7 @@ class GameImage(models.Model):
 class GameVideo(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='videos')
     video_url = models.URLField()
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True, null=True)
     is_main_video = models.BooleanField(default=False)
 
     def __str__(self):

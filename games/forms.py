@@ -1,12 +1,22 @@
 from django import forms
-from .models import Game, GameImage, GameVideo
+from .models import Game, GameImage, GameVideo, Platform
+
+
+class PlatformForm(forms.ModelForm):
+    class Meta:
+        model = Platform
+        fields = ['name', 'description']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
 class GameForm(forms.ModelForm):
     class Meta:
         model = Game
         fields = ['title', 'description', 'price', 'release_date', 'status', 'download_link', 'image_url']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control'}),
             'release_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
@@ -37,10 +47,10 @@ class GameImageForm(forms.ModelForm):
 class GameVideoForm(forms.ModelForm):
     class Meta:
         model = GameVideo
-        fields = ['video_url', 'title', 'is_main_video']
+        fields = ['video_url', 'is_main_video']
         widgets = {
             'video_url': forms.URLInput(attrs={'class': 'form-control'}),
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            
             'is_main_video': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 

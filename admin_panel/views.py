@@ -37,8 +37,7 @@ def admin_panel(request):
         for i in range(0, 10):  # Support up to 10 additional videos
             if f'video_url_{i}' in request.POST and request.POST.get(f'video_url_{i}').strip():
                 video_data = {
-                    'video_url': request.POST.get(f'video_url_{i}'),
-                    'title': request.POST.get(f'video_title_{i}', f'Video {i+1}')
+                    'video_url': request.POST.get(f'video_url_{i}')
                 }
                 video_form = GameVideoForm(video_data)
                 if video_form.is_valid():

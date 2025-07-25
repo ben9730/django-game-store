@@ -12,5 +12,7 @@ urlpatterns = [
     path('<int:pk>/videos/<int:video_id>/delete/', views.GameVideoDeleteView.as_view(), name='game_video_delete'),
     path('<int:pk>/delete/', views.GameDeleteView.as_view(), name='game_delete'),
     path('platforms/', views.PlatformListView.as_view(), name='platform_list'),
+    path('platforms/add/', views.PlatformCreateView.as_view(), name='platform_add'),
+    path('platforms/<int:pk>/edit/', views.PlatformUpdateView.as_view(), name='platform_edit'),
     path('platforms/<int:pk>/', views.PlatformDetailView.as_view(), name='platform_detail'),
 ]
