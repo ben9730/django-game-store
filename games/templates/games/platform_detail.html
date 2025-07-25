@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ platform.name }} - Game Store{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1>{{ platform.name }}</h1>
+        <p class="lead">{{ platform.description }}</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h2>Games Available on {{ platform.name }}</h2>
+        <div class="row">
+            {% for game in games %}
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    {% if game.images.exists %}
+                        <img src="{{ game.images.first.get_image_url }}" class="card-img-top" alt="{{ game.title }}">
+                    {% else %}
+                        <div class="card-img-top bg-light text-center p-4">
+                            <h4>No Image</h4>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ game.title }}</h5>
+                        <p class="card-text">{{ game.description|truncatewords:20 }}</p>
+                        <a href="{% url 'games:game_detail' game.pk %}" class="btn btn-primary">View Game</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">No games found for this platform.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

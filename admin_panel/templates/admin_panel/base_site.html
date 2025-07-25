@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Panel - Game Store{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1>Admin Panel</h1>
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="games-tab" data-bs-toggle="tab" href="#games" role="tab">Games</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="sales-tab" data-bs-toggle="tab" href="#sales" role="tab">Sales Reports</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane fade show active" id="games" role="tabpanel">
+                            <h3>Manage Games</h3>
+                            <div class="card mt-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Add New Game</h5>
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {{ game_form.as_p }}
+                                        <div class="mb-3">
+                                            <h6>Game Images</h6>
+                                            <div id="image-forms">
+                                                {{ image_form.as_p }}
+                                            </div>
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="addImageForm()">Add Image</button>
+                                        </div>
+                                        <div class="mb-3">
+                                            <h6>Game Videos</h6>
+                                            <div id="video-forms">
+                                                {{ video_form.as_p }}
+                                            </div>
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="addVideoForm()">Add Video</button>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Game</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="sales" role="tabpanel">
+                            {% include 'admin_panel/sales_reports.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let imageFormCount = 1;
+let videoFormCount = 1;
+
+function addImageForm() {
+    const container = document.getElementById('image-forms');
+    const form = document.createElement('div');
+    form.className = 'mb-3';
+    form.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">Image File</label>
+                <input type="file" name="image_${imageFormCount}" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Image URL</label>
+                <input type="url" name="image_url_${imageFormCount}" class="form-control">
+            </div>
+        </div>
+    `;
+    container.appendChild(form);
+    imageFormCount++;
+}
+
+function addVideoForm() {
+    const container = document.getElementById('video-forms');
+    const form = document.createElement('div');
+    form.className = 'mb-3';
+    form.innerHTML = `
+        <div class="row">
+            <div class="col-12">
+                <label class="form-label">Video URL</label>
+                <input type="url" name="video_url_${videoFormCount}" class="form-control">
+            </div>
+        </div>
+    `;
+    container.appendChild(form);
+    videoFormCount++;
+}
+</script>
+{% endblock %}

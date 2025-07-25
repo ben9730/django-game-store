@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ game.title }} - Game Store{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div id="gameCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for image in game.images.all %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ image.get_image_url }}" class="d-block w-100" alt="{{ game.title }}">
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#gameCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#gameCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        {% if user.is_staff %}
+            <a href="{% url 'games:game_image_upload' game.pk %}" class="btn btn-primary mb-3">Manage Images</a>
+            <a href="{% url 'games:game_video_upload' game.pk %}" class="btn btn-primary mb-3">Manage Videos</a>
+        {% endif %}
+        <h1 class="mb-3">{{ game.title }}</h1>
+        <p class="lead">{{ game.description }}</p>
+        <div class="mb-3">
+            <h4>Price: ${{ game.price }}</h4>
+            {% if user.is_authenticated %}
+            <button class="btn btn-primary">Add to Cart</button>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary">Login to Purchase</a>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <h4>Platforms</h4>
+            {% for platform in game.platforms.all %}
+            <span class="badge bg-primary me-1">{{ platform.name }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h2>Game Trailers</h2>
+        {% if game.videos.exists %}
+        <div class="row">
+            {% for video in game.videos.all %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ video.title }}</h5>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            {% if 'youtube.com/watch?v=' in video.video_url %}
+                                {% with video_id=video.video_url|cut:'https://www.youtube.com/watch?v=' %}
+                                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video_id }}?autoplay=0&amp;controls=1&amp;showinfo=0&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                {% endwith %}
+                            {% elif 'youtube.com/embed/' in video.video_url %}
+                                {% with video_id=video.video_url|cut:'https://www.youtube.com/embed/' %}
+                                    <iframe class="embed-responsive-item" src="{{ video.video_url }}?autoplay=0&amp;controls=1&amp;showinfo=0&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                {% endwith %}
+                            {% else %}
+                                <iframe class="embed-responsive-item" src="{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted">No trailers available for this game.</p>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}

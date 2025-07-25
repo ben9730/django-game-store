@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Games - Game Store{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Filters</h5>
+                <form method="get">
+
+                    <div class="mb-3">
+                        <label for="platform" class="form-label">Platform</label>
+                        <select name="platform" class="form-select" id="platform">
+                            <option value="">All Platforms</option>
+                            {% for platform in platforms %}
+                            <option value="{{ platform.name }}" {% if request.GET.platform == platform.name %}selected{% endif %}>
+                                {{ platform.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            {% for game in games %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if game.images.first %}
+    <img src="{{ game.images.first.get_image_url }}" class="card-img-top" alt="{{ game.title }}">
+{% else %}
+    <img src="{% static 'games/default_game_image.jpg' %}" class="card-img-top" alt="{{ game.title }}">
+{% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ game.title }}</h5>
+                        <p class="card-text">{{ game.description|truncatewords:20 }}</p>
+                        <p class="card-text"><strong>Price:</strong> ${{ game.price }}</p>
+                        <p class="card-text"><strong>Platforms:</strong>
+                            {% for platform in game.platforms.all %}
+                            <span class="badge bg-primary me-1">{{ platform.name }}</span>
+                            {% endfor %}
+                        </p>
+                        <a href="{% url 'games:game_detail' game.pk %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">No games found.</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% if games.has_other_pages %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if games.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ games.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.platform %}&platform={{ request.GET.platform }}{% endif %}">
+                        Previous
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for i in games.paginator.page_range %}
+                <li class="page-item {% if games.number == i %}active{% endif %}">
+                    <a class="page-link" href="?page={{ i }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.platform %}&platform={{ request.GET.platform }}{% endif %}">
+                        {{ i }}
+                    </a>
+                </li>
+                {% endfor %}
+                
+                {% if games.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ games.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.platform %}&platform={{ request.GET.platform }}{% endif %}">
+                        Next
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

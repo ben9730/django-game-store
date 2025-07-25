@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category.name }} - Game Store{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1>{{ category.name }}</h1>
+        <p>{{ category.description }}</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h2>Games in this category</h2>
+        <div class="row">
+            {% for game in games %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ game.images.first.image.url }}" class="card-img-top" alt="{{ game.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ game.title }}</h5>
+                        <p class="card-text">{{ game.description|truncatewords:20 }}</p>
+                        <p class="card-text"><strong>Price:</strong> ${{ game.price }}</p>
+                        <a href="{% url 'games:game_detail' game.pk %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">No games found in this category.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

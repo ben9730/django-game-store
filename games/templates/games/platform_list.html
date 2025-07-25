@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Platforms - Game Store{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1>Game Platforms</h1>
+        <div class="row">
+            {% for platform in platforms %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ platform.name }}</h5>
+                        <p class="card-text">{{ platform.description|truncatewords:20 }}</p>
+                        <p class="card-text">
+                            <strong>Games:</strong> {{ platform.game_set.count }}
+                        </p>
+                        <a href="{% url 'games:platform_detail' platform.pk %}" class="btn btn-primary">View Games</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">No platforms found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

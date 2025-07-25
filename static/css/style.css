@@ -1,0 +1,82 @@
+/* General Styles */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Navigation */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+/* Cards */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,.05);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Carousel */
+.carousel-item img {
+    height: 400px;
+    object-fit: cover;
+}
+
+/* Buttons */
+.btn-primary {
+    padding: 8px 20px;
+    font-weight: 500;
+}
+
+/* Tables */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+/* Charts */
+#salesChart,
+#dailySalesChart {
+    height: 400px;
+}
+
+/* Badges */
+.badge {
+    padding: 8px 12px;
+    font-size: 0.9em;
+}
+
+/* Profile Picture */
+img.rounded-circle {
+    object-fit: cover;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .carousel-item img {
+        height: 300px;
+    }
+    
+    #salesChart,
+    #dailySalesChart {
+        height: 300px;
+    }
+}

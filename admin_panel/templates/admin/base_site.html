@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | Game Store Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">Game Store Admin</a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<ul class="navbar-nav">
+    <li class="nav-item">
+        <a href="{% url 'games:game_list' %}" class="nav-link">Visit Store</a>
+    </li>
+</ul>
+{% endblock %}
