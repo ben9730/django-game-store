@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 
 
 class Platform(models.Model):
@@ -34,12 +35,9 @@ class Game(models.Model):
         return reverse('game_detail', args=[str(self.id)])
 
     def get_image_url(self):
+        """Return the first associated image URL or empty string."""
         if self.images.exists():
-            image = self.images.first()
-            if image.image:
-                return image.image.url
-            elif image.image_url:
-                return image.image_url
+            return self.images.first().image_url or ''
         return ''
 
     def get_video_urls(self):
@@ -67,3 +65,32 @@ class GameVideo(models.Model):
 
     def __str__(self):
         return f"{self.game.title} - {self.title}"
+
+
+class Cart(models.Model):
+    """Shopping cart linked to a user."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cart')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Cart #{self.id} for {self.user.username}"
+
+    def total_price(self):
+        return sum(item.subtotal() for item in self.items.all())
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        unique_together = ('cart', 'game')
+
+    def __str__(self):
+        return f"{self.game.title} x{self.quantity}"
+
+    def subtotal(self):
+        return self.price * self.quantity

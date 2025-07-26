@@ -105,3 +105,8 @@ game_store/
 ├── admin_panel/    # Custom admin panel
 └── game_store/     # Project settings
 ```
+
+## Development Credits
+
+This project was implemented using **AI-assisted development ("vibe coding")**. All functionality was built by an AI coding assistant based on detailed specs and guidance provided by the project owner, who also performed comprehensive QA and validation of the site.
+

@@ -11,6 +11,7 @@ User = get_user_model()
 
 def logout_view(request):
     logout(request)
+    messages.success(request, 'You have successfully logged out.')
     return redirect('games:game_list')
 
 def login_view(request):
