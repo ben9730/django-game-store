@@ -36,9 +36,13 @@
         <div class="mb-3">
             <h4>Price: ${{ game.price }}</h4>
             {% if user.is_authenticated %}
-            <button class="btn btn-primary">Add to Cart</button>
+            <form method="post" action="{% url 'games:add_to_cart' game.id %}" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
             {% else %}
-            <a href="{% url 'login' %}" class="btn btn-primary">Login to Purchase</a>
+            <a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login to Purchase</a>
             {% endif %}
         </div>
         <div class="mb-3">

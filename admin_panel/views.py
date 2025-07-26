@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Sum, Avg
 from django.utils import timezone
+from django.contrib import messages
 from datetime import datetime
 from .models import SalesReport
 from games.models import Game, GameImage, GameVideo
@@ -45,6 +46,7 @@ def admin_panel(request):
         
         if game_form.is_valid():
             game = game_form.save()
+            messages.success(request, 'Game added successfully')
             
             # Save images
             for form in image_forms:

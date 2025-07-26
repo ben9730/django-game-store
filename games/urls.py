@@ -15,4 +15,10 @@ urlpatterns = [
     path('platforms/add/', views.PlatformCreateView.as_view(), name='platform_add'),
     path('platforms/<int:pk>/edit/', views.PlatformUpdateView.as_view(), name='platform_edit'),
     path('platforms/<int:pk>/', views.PlatformDetailView.as_view(), name='platform_detail'),
+
+    # Cart URLs
+    path('cart/', views.CartDetailView.as_view(), name='cart_detail'),
+    path('cart/add/<int:game_id>/', views.AddToCartView.as_view(), name='add_to_cart'),
+    path('cart/remove/<int:item_id>/', views.RemoveCartItemView.as_view(), name='remove_cart_item'),
+    path('cart/checkout/', views.CartCheckoutView.as_view(), name='cart_checkout'),
 ]

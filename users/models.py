@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+import datetime
 
 class CustomUser(AbstractUser):
     # Additional user fields
@@ -26,11 +28,11 @@ class CustomUser(AbstractUser):
         return self.username
 
 class UserGame(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_games')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_games')
     game = models.ForeignKey('games.Game', on_delete=models.CASCADE)
     purchase_date = models.DateTimeField(auto_now_add=True)
     last_played = models.DateTimeField(null=True, blank=True)
-    play_time = models.DurationField(default=0)
+    play_time = models.DurationField(default=datetime.timedelta)
 
     class Meta:
         unique_together = ('user', 'game')

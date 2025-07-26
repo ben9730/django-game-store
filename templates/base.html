@@ -35,6 +35,26 @@
                     </li>
                     {% endif %}
                 </ul>
+
+                <!-- Cart link -->
+                <ul class="navbar-nav me-3">
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="{% if user.is_authenticated %}{% url 'games:cart_detail' %}{% else %}{% url 'users:login' %}?next={% url 'games:cart_detail' %}{% endif %}">
+                            <i class="fas fa-shopping-cart"></i>
+                            {% with count=user.is_authenticated|yesno:"1,0" %}{% endwith %}
+                            {% if user.is_authenticated %}
+                                {% with cart=user.cart.first %}
+                                    {% if cart and cart.items.exists %}
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{ cart.items.count }}
+                                        </span>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -62,7 +82,18 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="container mt-4">
         {% block content %}{% endblock %}
     </div>
 
