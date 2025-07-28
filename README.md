@@ -2,6 +2,15 @@
 
 An online gaming store application built with Django and PostgreSQL.
 
+## Development Credits
+
+This project was implemented using **AI-assisted development ("vibe coding")**. All functionality was built by an AI coding assistant based on detailed specs and guidance provided by the project owner, who also performed comprehensive QA and validation of the site.
+
+## Demo Video
+
+[▶️ Watch the application demo](https://www.youtube.com/watch?v=iHLY1WcsPn4&ab_channel=BGcoding)
+
+
 ## Features
 
 - Game management system
@@ -106,7 +115,7 @@ game_store/
 └── game_store/     # Project settings
 ```
 
-## Development Credits
+
 
 This project was implemented using **AI-assisted development ("vibe coding")**. All functionality was built by an AI coding assistant based on detailed specs and guidance provided by the project owner, who also performed comprehensive QA and validation of the site.
 
