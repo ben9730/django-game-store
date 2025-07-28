@@ -61,6 +61,10 @@ def admin_panel(request):
                 video.save()
             
             return redirect('admin_panel:admin_panel')
+        else:
+            # Ensure individual forms exist for rendering when validation fails
+            image_form = GameImageForm()
+            video_form = GameVideoForm()
     else:
         game_form = GameForm()
         image_form = GameImageForm()
